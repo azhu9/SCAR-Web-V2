@@ -1,0 +1,257 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background: #000;
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-black font-sans text-white antialiased;
+  }
+  a {
+    @apply text-white transition-colors;
+  }
+  a:hover {
+    color: #ff6b7e;
+  }
+  :focus-visible {
+    outline: 2px solid #ff6b7e;
+    outline-offset: 3px;
+  }
+  /* Keep in-page anchors clear of the fixed navbar. */
+  [id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+@layer components {
+  .link-ul {
+    @apply inline-block py-2 font-semibold;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+  }
+  .eyebrow {
+    @apply text-[13px] font-semibold uppercase tracking-eyebrow text-muted;
+  }
+  /* The site's corner-cut motif, echoing the hero panels: the top-right and
+     bottom-left corners are clipped. Set --cut to change the size. */
+  .cut {
+    --cut: 10px;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--cut)) 0,
+      100% var(--cut),
+      100% 100%,
+      var(--cut) 100%,
+      0 calc(100% - var(--cut))
+    );
+  }
+  .cut-md {
+    --cut: 18px;
+  }
+  .cut-lg {
+    --cut: 32px;
+  }
+  /* clip-path hides an outside focus ring, so clipped controls draw it inside. */
+  .cut:focus-visible,
+  .btn:focus-visible,
+  .icon-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -5px;
+  }
+
+  .btn {
+    @apply cut inline-flex items-center justify-center whitespace-nowrap bg-scarlet font-semibold text-white transition-colors;
+  }
+  .btn:hover {
+    @apply bg-[#B8152E] text-white;
+  }
+  /* Square icon button (menu open/close). */
+  .icon-btn {
+    @apply cut inline-flex h-11 w-11 shrink-0 items-center justify-center bg-[#1E1F22] text-white transition-colors;
+    --cut: 8px;
+  }
+  .icon-btn:hover {
+    @apply bg-[#2C2E32];
+  }
+  .container-content {
+    @apply mx-auto w-full max-w-content px-6;
+  }
+}
+
+/* ---------- Hero opening animation ----------
+   The hero is covered by four black corner panels. During the intro each starts
+   at ~50% x 50% (together covering the photos) and shrinks to its corner.
+   Two identical keyframe sets (-a / -b) exist so "Replay intro" can restart the
+   animation by swapping classes instead of remounting the DOM. */
+
+.hero {
+  /* Bottom-left panel width; vw rather than % so its content can be laid out at
+     the final width while the panel itself is still animating. */
+  --blw: min(620px, 100vw);
+  --tlw: 236px;
+  --bar-h: 76px;
+}
+
+.hero-panel {
+  position: absolute;
+  z-index: 3;
+  overflow: hidden;
+  /* Slightly see-through over the photos; the blur keeps text readable. */
+  background: rgb(0 0 0 / 0.78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  animation-duration: 1.15s;
+  animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+  animation-delay: 1.9s;
+  animation-fill-mode: both;
+}
+.hero-tl {
+  top: 0;
+  left: 0;
+  width: var(--tlw);
+  height: var(--bar-h);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+}
+.hero-tr {
+  top: 0;
+  right: 0;
+  /* --fit is the measured width of the nav content (set in Hero.jsx). */
+  width: min(var(--fit, 660px), calc(100% - var(--tlw) - 16px));
+  height: var(--bar-h);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+.hero-bl {
+  bottom: 0;
+  left: 0;
+  width: min(var(--blw), 100%);
+  /* --fit is the measured height of the panel's content (set in Hero.jsx). */
+  height: var(--fit, 300px);
+  clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+}
+.hero-br {
+  bottom: 0;
+  right: 0;
+  width: 330px;
+  height: 124px;
+  clip-path: polygon(28px 0, 100% 0, 100% 100%, 0 100%, 0 28px);
+}
+
+.hero-intro {
+  opacity: 0;
+  animation-duration: 2.2s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+.hero-intro-bar {
+  width: 100%;
+  animation-duration: 2.2s;
+  animation-fill-mode: both;
+}
+
+.hero-reveal {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+  animation-delay: 2.8s;
+  animation-fill-mode: both;
+}
+.hero-reveal-2 { animation-delay: 2.95s; }
+.hero-reveal-3 { animation-delay: 3.1s; }
+.hero-reveal-4 { animation-delay: 3.25s; }
+
+.hero.run-a .hero-panel { animation-name: hero-open-a; }
+.hero.run-b .hero-panel { animation-name: hero-open-b; }
+.hero.run-a .hero-intro { animation-name: hero-logo-a; }
+.hero.run-b .hero-intro { animation-name: hero-logo-b; }
+.hero.run-a .hero-intro-bar { animation-name: hero-bar-a; }
+.hero.run-b .hero-intro-bar { animation-name: hero-bar-b; }
+.hero.run-a .hero-reveal { animation-name: hero-show-a; }
+.hero.run-b .hero-reveal { animation-name: hero-show-b; }
+
+/* End state, used on repeat visits: no intro, panels already in their corners. */
+.hero.is-static .hero-intro { display: none; }
+
+/* Panels stay solid black while they cover the photos, then ease to translucent
+   as they settle into the corners. */
+@keyframes hero-open-a {
+  from { width: 50.5%; height: 50.5%; background-color: #000; }
+  60% { background-color: #000; }
+}
+@keyframes hero-open-b {
+  from { width: 50.5%; height: 50.5%; background-color: #000; }
+  60% { background-color: #000; }
+}
+@keyframes hero-logo-a {
+  0% { opacity: 0; transform: scale(0.88); }
+  28%, 74% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.06); }
+}
+@keyframes hero-logo-b {
+  0% { opacity: 0; transform: scale(0.88); }
+  28%, 74% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.06); }
+}
+@keyframes hero-bar-a { 0%, 30% { width: 0; } 62%, 100% { width: 100%; } }
+@keyframes hero-bar-b { 0%, 30% { width: 0; } 62%, 100% { width: 100%; } }
+@keyframes hero-show-a { from { opacity: 0; transform: translateY(14px); } }
+@keyframes hero-show-b { from { opacity: 0; transform: translateY(14px); } }
+
+/* Background slideshow: three photos cross-fade every 6s with a slow zoom. */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  animation: hero-slide 18s linear infinite;
+}
+@keyframes hero-slide {
+  0% { opacity: 0; transform: scale(1.12); }
+  5% { opacity: 1; }
+  33% { opacity: 1; }
+  38% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; }
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 820px) {
+  .hero {
+    --blw: 100vw;
+    --tlw: 150px;
+  }
+  .hero-br { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero *,
+  .site-nav {
+    animation: none !important;
+    transition: none !important;
+  }
+  .hero-intro { display: none; }
+  .hero-slide { display: none; }
+  html:focus-within { scroll-behavior: auto; }
+}
+
+/* ---------- Season timeline (About page) ---------- */
+
+/* Carousel autoplay progress: the active segment fills over the slide interval. */
+.carousel-progress {
+  animation: carousel-progress linear forwards;
+}
+@keyframes carousel-progress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-progress { animation: none; width: 100%; }
+}
