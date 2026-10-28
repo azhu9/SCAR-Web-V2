@@ -41,5 +41,5 @@ files in `src/assets/` (hero photos capped at 2400px wide, everything else at 14
 
 ## Deploying
 
-This is a single-page app: the host must serve `index.html` for every route (e.g. a rewrite rule on Vercel/Netlify, or a
-`404.html` copy on GitHub Pages).
+Deployed on Vercel. `vercel.json` sets the build (`npm run build` into `dist/`) and rewrites every route to `index.html`,
+since this is a single-page app — without that, opening `/about` directly would 404.
