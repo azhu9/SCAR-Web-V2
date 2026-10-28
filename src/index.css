@@ -255,3 +255,34 @@ html:focus-within {
 @media (prefers-reduced-motion: reduce) {
   .carousel-progress { animation: none; width: 100%; }
 }
+
+/* ---------- Homepage sponsors ---------- */
+
+/* Logo strip: two copies of the row slide left by one copy's width, then repeat. */
+.marquee {
+  animation: marquee 45s linear infinite;
+}
+.marquee:hover,
+.marquee:focus-within {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Translucent text panel over the robot photo on wide screens, cut like the hero
+   panels: top-right corner, plus bottom-left to match the photo's own cut. */
+@media (min-width: 1024px) {
+  .hero-panel-static {
+    background: rgb(0 0 0 / 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 32px 100%, 0 calc(100% - 32px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee { animation: none; width: 100%; }
+  .marquee-row { flex-wrap: wrap; justify-content: center; width: 100%; }
+  .marquee-row[aria-hidden] { display: none; }
+}

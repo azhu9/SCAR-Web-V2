@@ -3,8 +3,9 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 // Shell for every page except Home: fixed navbar, a simple page header, footer.
-// `name` is the short page name used in the browser tab title.
-const PageLayout = ({ name, title, eyebrow, intro, children }) => {
+// `name` is the short page name used in the browser tab title; `actions` (optional)
+// renders below the intro, e.g. buttons.
+const PageLayout = ({ name, title, eyebrow, intro, actions, children }) => {
   useEffect(() => {
     document.title = `${name} | SCAR Robotics`;
   }, [name]);
@@ -17,6 +18,7 @@ const PageLayout = ({ name, title, eyebrow, intro, children }) => {
           {eyebrow && <p className="eyebrow text-scarlet-light">{eyebrow}</p>}
           <h1 className="mt-4 text-[clamp(40px,6vw,76px)] font-extrabold leading-none tracking-[-0.03em]">{title}</h1>
           {intro && <p className="mt-6 max-w-[640px] text-lg leading-[1.6] text-soft">{intro}</p>}
+          {actions && <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">{actions}</div>}
         </header>
         {children}
       </main>
