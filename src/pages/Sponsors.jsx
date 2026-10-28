@@ -55,7 +55,7 @@ const FAQ = [
   },
   {
     q: 'Can we sponsor with products or services instead of money?',
-    a: 'Absolutely. Software, materials, manufacturing and travel support all make a real difference. Tell us what you have in mind.',
+    a: 'Absolutely. Software, materials, manufacturing and travel support all make a real difference.',
   },
   {
     q: 'How do we get started?',
@@ -244,28 +244,6 @@ const Sponsors = () => (
               <p className="max-w-[640px] pb-6 leading-relaxed text-soft">{a}</p>
             </details>
           ))}
-        </div>
-      </div>
-    </section>
-
-    {/* Get in touch */}
-    <section aria-labelledby="become-heading" className="border-t border-line">
-      <div className="container-content py-24">
-        <SectionHeading id="become-heading" eyebrow="Get in touch">
-          Become a sponsor.
-        </SectionHeading>
-        <p className="mt-6 max-w-[560px] text-lg leading-[1.6] text-soft">
-          Send us a message or email{' '}
-          <a href={`mailto:${CONTACT_EMAIL}`} className="underline decoration-2 underline-offset-[6px]">
-            {CONTACT_EMAIL}
-          </a>
-          , and we will follow up with next steps.
-        </p>
-        <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
-          <Link to="/contact" className="btn px-7 py-[15px] text-base">
-            Contact us
-          </Link>
-          <PacketButton />
         </div>
       </div>
     </section>
